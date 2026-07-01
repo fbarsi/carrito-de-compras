@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 const { width } = Dimensions.get("window");
-const BUTTON_SIZE = (width - 40) / 4;
+const BUTTON_SIZE = (width - 90) / 4;
 
 type Props = {
   texto: string;
@@ -15,7 +15,7 @@ export default function NumButton({
   texto,
   onPress,
   estiloEspecial,
-  fontSize = 55,
+  fontSize = 45,
 }: Props) {
   return (
     <TouchableOpacity
@@ -24,7 +24,7 @@ export default function NumButton({
         estiloEspecial,
         texto === "=" ? styles.botonIgual : null,
       ]}
-      onPress={() => console.log(texto)}
+      onPress={onPress}
     >
       <Text style={[styles.texto, { fontSize: fontSize }]}>{texto}</Text>
     </TouchableOpacity>

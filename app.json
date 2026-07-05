@@ -6,7 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "carritodecompras",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#111111",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true

@@ -1,8 +1,11 @@
 import React from "react";
 import { Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-const { width } = Dimensions.get("window");
-const BUTTON_SIZE = (width - 90) / 4;
+const { width, height } = Dimensions.get("window");
+export const BUTTON_PADDING = 8;
+export const BUTTON_WIDTH =
+  (Math.round(width / 10) * 10 - BUTTON_PADDING * 5) / 4;
+export const BUTTON_HEIGHT = BUTTON_WIDTH - 25;
 
 type Props = {
   texto: string;
@@ -34,15 +37,15 @@ export default function NumButton({
 const styles = StyleSheet.create({
   boton: {
     backgroundColor: "#1c1c1c",
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
+    width: BUTTON_WIDTH,
+    height: BUTTON_HEIGHT,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    margin: 4,
+    margin: BUTTON_PADDING / 2,
   },
   botonIgual: {
-    height: BUTTON_SIZE * 2 + 8,
+    height: BUTTON_HEIGHT * 2 + BUTTON_PADDING,
   },
   texto: {
     color: "#fff",

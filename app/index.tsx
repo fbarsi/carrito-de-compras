@@ -1,7 +1,10 @@
-import NumButton from "@/components/numButton";
+import NumButton, {
+  BUTTON_PADDING,
+  BUTTON_WIDTH,
+} from "@/components/numButton";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   const [isInputingPrice, setIsInputingPrice] = useState(true);
@@ -51,111 +54,105 @@ export default function App() {
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        {/* entrada de precio y cantidad */}
-        <View style={styles.inputContainer}>
-          {/* entrada de precio */}
-          <Pressable
-            style={styles.inputPriceSection}
-            onPress={() => setIsInputingPrice(true)}
+    <SafeAreaView style={styles.container}>
+      {/* entrada de precio y cantidad */}
+      <View style={styles.inputContainer}>
+        {/* entrada de precio */}
+        <Pressable
+          style={styles.inputPriceSection}
+          onPress={() => setIsInputingPrice(true)}
+        >
+          <Text
+            style={[styles.inputText, isInputingPrice && styles.activeInput]}
           >
-            <Text
-              style={[styles.inputText, isInputingPrice && styles.activeInput]}
-            >
-              {priceInput}
-            </Text>
-          </Pressable>
-          {/* wrapper */}
-          <View style={styles.inputWrapper}>
-            <Text style={[styles.inputText, { paddingVertical: 16 }]}>x</Text>
-            {/* entrada de cantidad */}
-            <Pressable
-              style={styles.inputQuantitySection}
-              onPress={() => setIsInputingPrice(false)}
-            >
-              {quantityInput !== "" ? (
-                <Text
-                  style={[
-                    styles.inputText,
-                    !isInputingPrice && styles.activeInput,
-                  ]}
-                >
-                  {quantityInput}
-                </Text>
-              ) : (
-                <Text style={[styles.inputText, { color: "#666" }]}>1</Text>
-              )}
-            </Pressable>
-          </View>
-        </View>
+            {priceInput}
+          </Text>
+        </Pressable>
+        <Text style={[styles.inputText]}>x</Text>
+        {/* entrada de cantidad */}
+        <Pressable
+          style={styles.inputQuantitySection}
+          onPress={() => setIsInputingPrice(false)}
+        >
+          <Text
+            style={[
+              styles.inputText,
+              !isInputingPrice && styles.activeInput,
+              !quantityInput && styles.placeholder,
+            ]}
+          >
+            {!!quantityInput ? quantityInput : "1"}
+          </Text>
+        </Pressable>
+      </View>
 
-        {/* teclado numerico */}
-        <View style={styles.keyboard}>
-          {/* bloque izquierdo  */}
-          <View style={styles.columnBlock}>
-            <View style={styles.rowBlock}>
-              <NumButton texto="7" onPress={() => insertInput("7")} />
-              <NumButton texto="8" onPress={() => insertInput("8")} />
-              <NumButton texto="9" onPress={() => insertInput("9")} />
-            </View>
-            <View style={styles.rowBlock}>
-              <NumButton texto="4" onPress={() => insertInput("4")} />
-              <NumButton texto="5" onPress={() => insertInput("5")} />
-              <NumButton texto="6" onPress={() => insertInput("6")} />
-            </View>
-            <View style={styles.rowBlock}>
-              <NumButton texto="1" onPress={() => insertInput("1")} />
-              <NumButton texto="2" onPress={() => insertInput("2")} />
-              <NumButton texto="3" onPress={() => insertInput("3")} />
-            </View>
-            <View style={styles.rowBlock}>
-              <NumButton texto="0" onPress={() => insertInput("0")} />
-              <NumButton texto="," onPress={() => insertComma()} />
-              <NumButton
-                texto="del"
-                onPress={() => deleteInput()}
-                fontSize={35}
-              />
-            </View>
+      {/* teclado numerico */}
+      <View style={styles.keyboard}>
+        {/* bloque izquierdo  */}
+        <View style={styles.columnBlock}>
+          <View style={styles.rowBlock}>
+            <NumButton texto="7" onPress={() => insertInput("7")} />
+            <NumButton texto="8" onPress={() => insertInput("8")} />
+            <NumButton texto="9" onPress={() => insertInput("9")} />
           </View>
-          {/* bloque derecho  */}
-          <View style={styles.columnBlock}>
-            <NumButton texto="AC" onPress={() => clearInput()} fontSize={35} />
+          <View style={styles.rowBlock}>
+            <NumButton texto="4" onPress={() => insertInput("4")} />
+            <NumButton texto="5" onPress={() => insertInput("5")} />
+            <NumButton texto="6" onPress={() => insertInput("6")} />
+          </View>
+          <View style={styles.rowBlock}>
+            <NumButton texto="1" onPress={() => insertInput("1")} />
+            <NumButton texto="2" onPress={() => insertInput("2")} />
+            <NumButton texto="3" onPress={() => insertInput("3")} />
+          </View>
+          <View style={styles.rowBlock}>
+            <NumButton texto="0" onPress={() => insertInput("0")} />
+            <NumButton texto="," onPress={() => insertComma()} />
             <NumButton
-              texto="X"
-              onPress={() => setIsInputingPrice(!isInputingPrice)}
+              texto="del"
+              onPress={() => deleteInput()}
+              fontSize={35}
             />
-            <NumButton texto="=" onPress={() => console.log("=")} />
           </View>
         </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        {/* bloque derecho  */}
+        <View style={styles.columnBlock}>
+          <NumButton texto="AC" onPress={() => clearInput()} fontSize={35} />
+          <NumButton
+            texto="X"
+            onPress={() => setIsInputingPrice(!isInputingPrice)}
+          />
+          <NumButton texto="=" onPress={() => console.log("=")} />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3f3f3f",
+    backgroundColor: "#111111",
     justifyContent: "flex-end",
-    paddingHorizontal: 33,
+    alignItems: "center",
   },
   inputContainer: {
     backgroundColor: "#1c1c1c",
     flexDirection: "row",
-    padding: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 16,
     borderRadius: 8,
     marginBottom: 4,
-    justifyContent: "space-between",
+    alignItems: "center",
+    width: BUTTON_WIDTH * 4 + BUTTON_PADDING * 3,
   },
   inputPriceSection: {
-    width: 230,
+    flex: 4,
     padding: 16,
   },
   inputQuantitySection: {
+    flex: 1,
     padding: 16,
-    width: 80,
     alignItems: "flex-end",
   },
   inputWrapper: {
@@ -164,7 +161,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   inputText: {
-    color: "#fff",
+    color: "#ffffff",
     fontWeight: "900",
     fontSize: 26,
   },
@@ -180,5 +177,8 @@ const styles = StyleSheet.create({
   },
   rowBlock: {
     flexDirection: "row",
+  },
+  placeholder: {
+    opacity: 0.5,
   },
 });

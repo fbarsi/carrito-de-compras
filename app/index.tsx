@@ -42,12 +42,12 @@ export default function App() {
 
   const insertComma = () => {
     if (isInputingPrice) {
-      if (priceInput.includes(",")) {
+      if (priceInput.includes(",") || !priceInput) {
         return;
       }
       setPriceInput(priceInput + ",");
     } else {
-      if (quantityInput.includes(",")) {
+      if (quantityInput.includes(",") || !quantityInput) {
         return;
       }
       setQuantityInput(quantityInput + ",");
@@ -115,6 +115,20 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* total */}
+      <View style={styles.headerContainer}>
+        <Pressable
+          style={styles.totalButton}
+          onPress={() => console.log("btn")}
+        >
+          <Text style={styles.inputText}>btn</Text>
+        </Pressable>
+        <View style={styles.totalContainer}>
+          <Text style={styles.inputText}>Total:</Text>
+          <Text style={styles.inputText}>$ {0}</Text>
+        </View>
+      </View>
+
       {/* lista */}
       <FlatList
         style={styles.itemList}
@@ -203,6 +217,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#111111",
     justifyContent: "flex-end",
     alignItems: "center",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: BUTTON_WIDTH * 4 + BUTTON_PADDING * 3,
+    backgroundColor: "#1c1c1c",
+    borderRadius: 8,
+    marginTop: 8,
+    padding: 4,
+  },
+  totalContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 12,
+  },
+  totalButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
   },
   itemList: {
     backgroundColor: "#1c1c1c",

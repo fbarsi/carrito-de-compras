@@ -3,14 +3,17 @@ import NumButton, {
   BUTTON_PADDING,
   BUTTON_WIDTH,
 } from "@/components/numButton";
-import React, { useState } from "react";
+import { ItemProp, useCartStore } from "@/store/cartStore";
+import { AR_currency } from "@/utils/format";
+import React, { useRef, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
-  const [isInputingPrice, setIsInputingPrice] = useState(true);
-  const [priceInput, setPriceInput] = useState("");
-  const [quantityInput, setQuantityInput] = useState("");
+  const flatListRef = useRef<FlatList<ItemProp>>(null);
+  const [isInputingPrice, setIsInputingPrice] = useState<boolean>(true);
+  const [priceInput, setPriceInput] = useState<string>("");
+  const [quantityInput, setQuantityInput] = useState<string>("");
 
   const insertInput = (i: string) => {
     if (isInputingPrice) {
@@ -54,87 +57,53 @@ export default function App() {
     }
   };
 
-  const DATA = [
-    {
-      id: "1",
-      title: "First Item",
-      quantity: 2,
-      price: 1000,
-      total: 2000,
-    },
-    {
-      id: "2",
-      title: "Second Item",
-      quantity: 4,
-      price: 1500,
-      total: 6000,
-    },
-    {
-      id: "3",
-      title: "Third Item",
-      quantity: 6,
-      price: 2000,
-      total: 12000,
-    },
-    {
-      id: "4",
-      title: "Fourth Item",
-      quantity: 10,
-      price: 25000,
-      total: 25000,
-    },
-    {
-      id: "5",
-      title: "Fifth Item",
-      quantity: 2,
-      price: 30000,
-      total: 60000,
-    },
-    {
-      id: "6",
-      title: "Sixth Item",
-      quantity: 4,
-      price: 35000,
-      total: 14000,
-    },
-    {
-      id: "7",
-      title: "Seventh Item",
-      quantity: 6,
-      price: 40000,
-      total: 24000,
-    },
-    {
-      id: "8",
-      title: "Eighth Item",
-      quantity: 1000,
-      price: 4500000,
-      total: 4500000,
-    },
-  ];
+  const handleSubmit = () => {
+    const price = parseFloat(priceInput.replace(",", ".")) || 0;
+    const quantity = parseFloat(quantityInput.replace(",", ".")) || 1;
+    addItem({
+      id: Date.now().toString(),
+      title: `Item Número ${items.length + 1}`,
+      price: price,
+      quantity: quantity,
+    });
+    setPriceInput("");
+    setQuantityInput("");
+    setIsInputingPrice(true);
+  };
+
+  const items = useCartStore((state) => state.items);
+  const total = useCartStore((state) => state.total);
+  const addItem = useCartStore((state) => state.addItem);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   return (
     <SafeAreaView style={styles.container}>
       {/* total */}
       <View style={styles.headerContainer}>
-        <Pressable
-          style={styles.totalButton}
-          onPress={() => console.log("btn")}
-        >
+        <Pressable style={styles.totalButton} onPress={clearCart}>
           <Text style={styles.inputText}>btn</Text>
         </Pressable>
         <View style={styles.totalContainer}>
           <Text style={styles.inputText}>Total:</Text>
-          <Text style={styles.inputText}>$ {0}</Text>
+          <Text style={styles.inputText}>$ {AR_currency.format(total)}</Text>
         </View>
       </View>
 
       {/* lista */}
       <FlatList
+        key={items.length === 0 ? "empty" : "populated"}
+        ref={flatListRef}
         style={styles.itemList}
-        data={DATA}
+        data={items}
         renderItem={({ item }) => <Item item={item} />}
         keyExtractor={(item) => item.id}
+        onContentSizeChange={() =>
+          flatListRef.current?.scrollToEnd({ animated: true })
+        }
+        contentContainerStyle={items.length === 0 && styles.emptyItemList}
+        ListEmptyComponent={
+          <Text style={[styles.inputText]}>No hay items en la lista.</Text>
+        }
       />
 
       {/* entrada de precio y cantidad */}
@@ -204,7 +173,7 @@ export default function App() {
             texto="X"
             onPress={() => setIsInputingPrice(!isInputingPrice)}
           />
-          <NumButton texto="=" onPress={() => console.log("=")} />
+          <NumButton texto="=" onPress={handleSubmit} />
         </View>
       </View>
     </SafeAreaView>
@@ -244,6 +213,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 8,
     padding: 4,
+  },
+  emptyItemList: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   inputContainer: {
     backgroundColor: "#1c1c1c",

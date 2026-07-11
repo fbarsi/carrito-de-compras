@@ -1,3 +1,4 @@
+import { AR_currency } from "@/utils/format";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -6,7 +7,6 @@ type ItemProp = {
     title: string;
     quantity: number;
     price: number;
-    total: number;
   };
 };
 
@@ -16,11 +16,19 @@ export default function Item({ item }: ItemProp) {
       <View style={{ flex: 1 }}>
         <Text style={styles.text}>{item.title}</Text>
         <View style={{ flexDirection: "row" }}>
-          <Text style={styles.text2}>$ {item.price}</Text>
-          <Text style={styles.text2}> x {item.quantity}</Text>
+          <Text style={styles.text2}>
+            {"$ "}
+            {AR_currency.format(item.price)}
+          </Text>
+          <Text style={styles.text2}>
+            {" x "}
+            {item.quantity.toString().replace(".", ",")}
+          </Text>
         </View>
       </View>
-      <Text style={styles.text3}>$ {item.total}</Text>
+      <Text style={styles.text3}>
+        $ {AR_currency.format(item.price * item.quantity)}
+      </Text>
     </View>
   );
 }

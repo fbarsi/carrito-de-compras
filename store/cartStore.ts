@@ -11,6 +11,7 @@ type Cart = {
   items: ItemProp[];
   total: number;
   addItem: (item: ItemProp) => void;
+  removeItem: (item: ItemProp) => void;
   clearCart: () => void;
 };
 
@@ -20,7 +21,16 @@ export const useCartStore = create<Cart>((set) => ({
   addItem: (item) =>
     set((state) => ({
       items: [...state.items, item],
-      total: state.total + (item.price * item.quantity),
+      total: state.total + item.price * item.quantity,
     })),
-  clearCart: () => set(() => ({ items: [], total: 0 })),
+  removeItem: (item) =>
+    set((state) => ({
+      items: state.items.filter((_item) => _item.id !== item.id),
+      total: Math.max(0, state.total - item.price * item.quantity),
+    })),
+  clearCart: () =>
+    set(() => ({
+      items: [],
+      total: 0,
+    })),
 }));

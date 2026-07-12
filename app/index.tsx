@@ -74,6 +74,7 @@ export default function App() {
   const items = useCartStore((state) => state.items);
   const total = useCartStore((state) => state.total);
   const addItem = useCartStore((state) => state.addItem);
+  const removeItem = useCartStore((state) => state.removeItem);
   const clearCart = useCartStore((state) => state.clearCart);
 
   return (
@@ -95,7 +96,11 @@ export default function App() {
         ref={flatListRef}
         style={styles.itemList}
         data={items}
-        renderItem={({ item }) => <Item item={item} />}
+        renderItem={({ item }) => (
+          <Pressable onPress={() => removeItem(item)}>
+            <Item item={item} />
+          </Pressable>
+        )}
         keyExtractor={(item) => item.id}
         onContentSizeChange={() =>
           flatListRef.current?.scrollToEnd({ animated: true })

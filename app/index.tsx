@@ -1,4 +1,5 @@
 import Item from "@/components/item";
+import ItemModal from "@/components/itemModal";
 import NumButton, {
   BUTTON_PADDING,
   BUTTON_WIDTH,
@@ -14,6 +15,12 @@ export default function App() {
   const [isInputingPrice, setIsInputingPrice] = useState<boolean>(true);
   const [priceInput, setPriceInput] = useState<string>("");
   const [quantityInput, setQuantityInput] = useState<string>("");
+  const [itemToModify, setItemToModify] = useState<ItemProp | null>(null);
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [modalTitleInput, setModalTitleInput] = useState<string>("");
+  const [modalPriceInput, setModalPriceInput] = useState<string>("");
+  const [modalQuantityInput, setModalQuantityInput] = useState<string>("");
 
   const insertInput = (i: string) => {
     if (isInputingPrice) {
@@ -58,17 +65,36 @@ export default function App() {
   };
 
   const handleSubmit = () => {
-    const price = parseFloat(priceInput.replace(",", ".")) || 0;
-    const quantity = parseFloat(quantityInput.replace(",", ".")) || 1;
+    const price = parseFloat(modalPriceInput.replace(",", ".")) || 0;
+    const quantity = parseFloat(modalQuantityInput.replace(",", ".")) || 1;
     addItem({
       id: Date.now().toString(),
-      title: `Item Número ${items.length + 1}`,
+      title: modalTitleInput,
       price: price,
       quantity: quantity,
     });
     setPriceInput("");
     setQuantityInput("");
     setIsInputingPrice(true);
+    setModalTitleInput("");
+    setModalPriceInput("");
+    setModalQuantityInput("");
+  };
+
+  const confirmButton = () => {
+    setIsModalVisible(false);
+    handleSubmit();
+  };
+
+  const handleModal = () => {
+    setModalPriceInput(priceInput);
+    setModalQuantityInput(quantityInput);
+    setIsModalVisible(true);
+  };
+
+  const modify = (item: ItemProp | null) => {
+    setItemToModify(item);
+    setIsModalVisible(true);
   };
 
   const items = useCartStore((state) => state.items);
@@ -81,7 +107,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       {/* total */}
       <View style={styles.headerContainer}>
-        <Pressable style={styles.totalButton} onPress={clearCart}>
+        <Pressable style={styles.totalButton} onPress={handleModal}>
           <Text style={styles.inputText}>btn</Text>
         </Pressable>
         <View style={styles.totalContainer}>
@@ -89,7 +115,11 @@ export default function App() {
           <Text style={styles.inputText}>$ {AR_currency.format(total)}</Text>
         </View>
       </View>
-
+      <ItemModal
+        isVisible={isModalVisible}
+        itemToModify={itemToModify}
+        onClose={() => setIsModalVisible(false)}
+      />
       {/* lista */}
       <FlatList
         key={items.length === 0 ? "empty" : "populated"}
@@ -97,7 +127,7 @@ export default function App() {
         style={styles.itemList}
         data={items}
         renderItem={({ item }) => (
-          <Pressable onPress={() => removeItem(item)}>
+          <Pressable onPress={() => modify(item)}>
             <Item item={item} />
           </Pressable>
         )}
@@ -110,7 +140,6 @@ export default function App() {
           <Text style={[styles.inputText]}>No hay items en la lista.</Text>
         }
       />
-
       {/* entrada de precio y cantidad */}
       <View style={styles.inputContainer}>
         {/* entrada de precio */}
@@ -141,7 +170,6 @@ export default function App() {
           </Text>
         </Pressable>
       </View>
-
       {/* teclado numerico */}
       <View style={styles.keyboard}>
         {/* bloque izquierdo  */}
@@ -178,7 +206,7 @@ export default function App() {
             texto="X"
             onPress={() => setIsInputingPrice(!isInputingPrice)}
           />
-          <NumButton texto="=" onPress={handleSubmit} />
+          <NumButton texto="=" onPress={handleModal} />
         </View>
       </View>
     </SafeAreaView>

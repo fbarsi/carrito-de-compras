@@ -25,7 +25,7 @@ export default function ItemModal({
   const [quantity, setQuantity] = useState("");
 
   const addItem = useCartStore((state) => state.addItem);
-  const modifyItem = () => {};
+  const modifyItem = useCartStore((state) => state.modifyItem);
 
   useEffect(() => {
     if (itemToModify) {
@@ -43,7 +43,12 @@ export default function ItemModal({
     const priceNum = parseFloat(price.replace(",", ".")) || 0;
     const quantityNum = parseFloat(quantity.replace(",", ".")) || 1;
     if (itemToModify) {
-      modifyItem();
+      modifyItem({
+        id: itemToModify.id,
+        title: title,
+        price: priceNum,
+        quantity: quantityNum,
+      });
     } else {
       addItem({
         id: Date.now().toString(),

@@ -73,9 +73,7 @@ export default function App() {
       price: price,
       quantity: quantity,
     });
-    setPriceInput("");
-    setQuantityInput("");
-    setIsInputingPrice(true);
+
     setModalTitleInput("");
     setModalPriceInput("");
     setModalQuantityInput("");
@@ -97,6 +95,13 @@ export default function App() {
     setIsModalVisible(true);
   };
 
+  const onClose = () => {
+    setIsModalVisible(false);
+    setPriceInput("");
+    setQuantityInput("");
+    setIsInputingPrice(true);
+  };
+
   const items = useCartStore((state) => state.items);
   const total = useCartStore((state) => state.total);
   const addItem = useCartStore((state) => state.addItem);
@@ -107,8 +112,8 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       {/* total */}
       <View style={styles.headerContainer}>
-        <Pressable style={styles.totalButton} onPress={handleModal}>
-          <Text style={styles.inputText}>btn</Text>
+        <Pressable style={styles.totalButton} onPress={clearCart}>
+          <Text style={styles.inputText}>nuevo</Text>
         </Pressable>
         <View style={styles.totalContainer}>
           <Text style={styles.inputText}>Total:</Text>
@@ -118,7 +123,8 @@ export default function App() {
       <ItemModal
         isVisible={isModalVisible}
         itemToModify={itemToModify}
-        onClose={() => setIsModalVisible(false)}
+        inputStates={{ price: priceInput, quantity: quantityInput }}
+        onClose={onClose}
       />
       {/* lista */}
       <FlatList

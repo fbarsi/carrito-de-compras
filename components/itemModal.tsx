@@ -12,17 +12,19 @@ import {
 type itemModalProps = {
   isVisible: boolean;
   itemToModify: ItemProp | null;
+  inputStates: { price: string; quantity: string };
   onClose: () => void;
 };
 
 export default function ItemModal({
   isVisible,
   itemToModify,
+  inputStates,
   onClose,
 }: itemModalProps) {
   const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [price, setPrice] = useState(inputStates.price);
+  const [quantity, setQuantity] = useState(inputStates.quantity);
 
   const addItem = useCartStore((state) => state.addItem);
   const modifyItem = useCartStore((state) => state.modifyItem);
@@ -34,8 +36,8 @@ export default function ItemModal({
       setQuantity(itemToModify.quantity.toString());
     } else {
       setTitle("");
-      setPrice("");
-      setQuantity("");
+      setPrice(inputStates.price);
+      setQuantity(inputStates.quantity);
     }
   }, [itemToModify, isVisible]);
 

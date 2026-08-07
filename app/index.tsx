@@ -85,6 +85,7 @@ export default function App() {
   };
 
   const handleModal = () => {
+    setItemToModify(null);
     setModalPriceInput(priceInput);
     setModalQuantityInput(quantityInput);
     setIsModalVisible(true);
@@ -105,7 +106,6 @@ export default function App() {
   const items = useCartStore((state) => state.items);
   const total = useCartStore((state) => state.total);
   const addItem = useCartStore((state) => state.addItem);
-  const removeItem = useCartStore((state) => state.removeItem);
   const clearCart = useCartStore((state) => state.clearCart);
 
   return (

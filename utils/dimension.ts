@@ -1,0 +1,6 @@
+const HALF_WIDTH = 136;
+const PADDING = 24;
+const FULL_WIDTH = HALF_WIDTH * 2 + PADDING;
+
+export { FULL_WIDTH, HALF_WIDTH, PADDING };
+

@@ -1,4 +1,5 @@
 import { ItemProp, useCartStore } from "@/store/cartStore";
+import { FULL_WIDTH, HALF_WIDTH, PADDING } from "@/utils/dimension";
 import { Feather } from "@react-native-vector-icons/feather";
 import React, { useEffect, useState } from "react";
 import {
@@ -118,7 +119,7 @@ export default function ItemModal({
           <View style={{ padding: 32 }}>
             <Text style={styles.modalText}>Nombre del articulo</Text>
             <TextInput
-              style={[styles.modalTextInput, { width: 140 * 2 + 16 }]}
+              style={[styles.modalTextInput, { width: FULL_WIDTH }]}
               autoFocus
               value={title}
               onChangeText={setTitle}
@@ -127,7 +128,7 @@ export default function ItemModal({
               <View>
                 <Text style={styles.modalText}>Precio</Text>
                 <TextInput
-                  style={[styles.modalTextInput, { width: 140 }]}
+                  style={[styles.modalTextInput, { width: HALF_WIDTH }]}
                   value={price}
                   onChangeText={setPrice}
                 />
@@ -135,7 +136,7 @@ export default function ItemModal({
               <View>
                 <Text style={styles.modalText}>Cantidad</Text>
                 <TextInput
-                  style={[styles.modalTextInput, { width: 140 }]}
+                  style={[styles.modalTextInput, { width: HALF_WIDTH }]}
                   value={quantity}
                   onChangeText={setQuantity}
                 />
@@ -179,20 +180,20 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     padding: 16,
     borderRadius: 8,
-    width: 140 * 2 + 16,
+    width: FULL_WIDTH,
   },
   modalRowContainer: {
     flexDirection: "row",
-    gap: 16,
+    gap: PADDING,
     marginTop: 16,
-    marginBottom: 28,
+    marginBottom: 36,
   },
   modalButton: {
     backgroundColor: "#eeeeee",
     alignItems: "center",
     padding: 16,
     borderRadius: 8,
-    width: 140 * 2 + 16,
+    width: FULL_WIDTH,
   },
   modalButtonText: {
     color: "#000000",

@@ -1,9 +1,7 @@
 import Item from "@/components/item";
 import ItemModal from "@/components/itemModal";
-import NumButton, {
-  BUTTON_PADDING,
-  BUTTON_WIDTH,
-} from "@/components/numButton";
+import NumButton from "@/components/numButton";
+import { BUTTON_PADDING, BUTTON_WIDTH } from "@/utils/dimension";
 import { ItemProp, useCartStore } from "@/store/cartStore";
 import { AR_currency } from "@/utils/format";
 import React, { useRef, useState } from "react";
@@ -24,7 +22,7 @@ export default function App() {
 
   const insertInput = (i: string) => {
     if (isInputingPrice) {
-      if (priceInput.length < 11) {
+      if (priceInput.length < 6) {
         setPriceInput(priceInput + i);
       }
     } else {

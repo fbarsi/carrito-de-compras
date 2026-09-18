@@ -1,11 +1,6 @@
+import { BUTTON_HEIGHT, BUTTON_PADDING, BUTTON_WIDTH } from "@/utils/dimension";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-export const BUTTON_PADDING = 8;
-export const BUTTON_WIDTH =
-  (Math.round(width / 10) * 10 - BUTTON_PADDING * 5) / 4;
-export const BUTTON_HEIGHT = BUTTON_WIDTH - 25;
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type Props = {
   texto: string;

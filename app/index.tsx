@@ -1,9 +1,11 @@
+import CustomDrawer from "@/components/customDrawer";
 import Item from "@/components/item";
 import ItemModal from "@/components/itemModal";
 import NumButton from "@/components/numButton";
-import { BUTTON_PADDING, BUTTON_WIDTH } from "@/utils/dimension";
 import { ItemProp, useCartStore } from "@/store/cartStore";
+import { BUTTON_PADDING, BUTTON_WIDTH } from "@/utils/dimension";
 import { AR_currency } from "@/utils/format";
+import Feather from "@react-native-vector-icons/feather";
 import React, { useRef, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +18,7 @@ export default function App() {
   const [itemToModify, setItemToModify] = useState<ItemProp | null>(null);
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isDrawerVisible, setIsDrawerVisible] = useState<boolean>(false);
   const [modalTitleInput, setModalTitleInput] = useState<string>("");
   const [modalPriceInput, setModalPriceInput] = useState<string>("");
   const [modalQuantityInput, setModalQuantityInput] = useState<string>("");
@@ -106,18 +109,43 @@ export default function App() {
   const addItem = useCartStore((state) => state.addItem);
   const clearCart = useCartStore((state) => state.clearCart);
 
+  const handleClearCart = () => {
+    clearCart();
+    setIsDrawerVisible(false);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* total */}
       <View style={styles.headerContainer}>
-        <Pressable style={styles.totalButton} onPress={clearCart}>
-          <Text style={styles.inputText}>nuevo</Text>
+        <Pressable
+          style={styles.drawerButton}
+          onPress={() => {
+            setIsDrawerVisible(true);
+          }}
+        >
+          <Feather name="menu" size={32} color="#ffffff" />
         </Pressable>
         <View style={styles.totalContainer}>
-          <Text style={styles.inputText}>Total:</Text>
-          <Text style={styles.inputText}>$ {AR_currency.format(total)}</Text>
+          <Text style={styles.totalText}>Total:</Text>
+          <Text style={styles.totalText}>$ {AR_currency.format(total)}</Text>
         </View>
       </View>
+      <CustomDrawer visible={isDrawerVisible} onClose={closeDrawer}>
+        <Pressable style={styles.drawerButton} onPress={closeDrawer}>
+          <Feather name="x" size={36} color="#ffffff" />
+        </Pressable>
+        <Pressable style={styles.drawerButton} onPress={handleClearCart}>
+          <Text style={styles.drawerText}>Nueva lista</Text>
+        </Pressable>
+        <Pressable style={styles.drawerButton} onPress={handleClearCart}>
+          <Text style={styles.drawerText}>Historial</Text>
+        </Pressable>
+      </CustomDrawer>
       <ItemModal
         isVisible={isModalVisible}
         itemToModify={itemToModify}
@@ -239,7 +267,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 12,
   },
-  totalButton: {
+  drawerButton: {
     paddingVertical: 12,
     paddingHorizontal: 20,
   },
@@ -284,6 +312,16 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontWeight: "900",
     fontSize: 26,
+  },
+  totalText: {
+    color: "#ffffff",
+    fontWeight: "900",
+    fontSize: 24,
+  },
+  drawerText: {
+    color: "#ffffff",
+    fontWeight: "900",
+    fontSize: 20,
   },
   activeInput: {
     color: "#ffaa80",

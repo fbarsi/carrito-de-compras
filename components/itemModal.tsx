@@ -46,7 +46,7 @@ export default function ItemModal({
     } else {
       setTitle("");
       setPrice(inputStates.price);
-      setQuantity(inputStates.quantity);
+      setQuantity(inputStates.quantity || "1");
     }
   }, [itemToModify, isVisible]);
 

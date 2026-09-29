@@ -1,7 +1,11 @@
 import { ItemProp, useCartStore } from "@/store/cartStore";
-import { MODAL_INPUT_FULL_WIDTH, MODAL_INPUT_HALF_WIDTH, MODAL_INPUT_PADDING } from "@/utils/dimension";
+import {
+  MODAL_INPUT_FULL_WIDTH,
+  MODAL_INPUT_HALF_WIDTH,
+  MODAL_INPUT_PADDING,
+} from "@/utils/dimension";
 import { Feather } from "@react-native-vector-icons/feather";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -31,6 +35,8 @@ export default function ItemModal({
   const addItem = useCartStore((state) => state.addItem);
   const modifyItem = useCartStore((state) => state.modifyItem);
   const removeItem = useCartStore((state) => state.removeItem);
+
+  const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (itemToModify) {
@@ -85,6 +91,11 @@ export default function ItemModal({
       transparent={true}
       animationType="fade"
       onRequestClose={onClose}
+      onShow={() => {
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 50);
+      }}
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalCard}>
@@ -119,8 +130,8 @@ export default function ItemModal({
           <View style={{ padding: 32 }}>
             <Text style={styles.modalText}>Nombre del articulo</Text>
             <TextInput
+              ref={inputRef}
               style={[styles.modalTextInput, { width: MODAL_INPUT_FULL_WIDTH }]}
-              autoFocus
               value={title}
               onChangeText={setTitle}
             />
@@ -128,7 +139,10 @@ export default function ItemModal({
               <View>
                 <Text style={styles.modalText}>Precio</Text>
                 <TextInput
-                  style={[styles.modalTextInput, { width: MODAL_INPUT_HALF_WIDTH }]}
+                  style={[
+                    styles.modalTextInput,
+                    { width: MODAL_INPUT_HALF_WIDTH },
+                  ]}
                   value={price}
                   onChangeText={setPrice}
                 />
@@ -136,7 +150,10 @@ export default function ItemModal({
               <View>
                 <Text style={styles.modalText}>Cantidad</Text>
                 <TextInput
-                  style={[styles.modalTextInput, { width: MODAL_INPUT_HALF_WIDTH }]}
+                  style={[
+                    styles.modalTextInput,
+                    { width: MODAL_INPUT_HALF_WIDTH },
+                  ]}
                   value={quantity}
                   onChangeText={setQuantity}
                 />
